@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLAR SERVICES - Générateur de Factures</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary-color: #7209b7;
+            --success-color: #4cc9f0;
+            --warning-color: #f72585;
+            --danger-color: #f72585;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-color: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark-color);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--box-shadow);
+            animation: slideDown 0.5s ease;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .cloud-status {
+            background: linear-gradient(135deg, #4cc9f0, #4361ee);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(76, 201, 240, 0.3);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            animation: slideUp 0.6s ease;
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .info-section {
+            margin-bottom: 30px;
+        }
+
+        .info-box {
+            background: var(--light-gray);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .info-box i {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-top: 5px;
+        }
+
+        .info-box h3 {
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+
+        .info-box ol {
+            margin-left: 20px;
+            color: var(--gray-color);
+            line-height: 1.8;
+        }
+
+        .info-box li {
+            margin-bottom: 8px;
+        }
+
+        .action-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .btn-generate {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-generate:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-generate:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .progress-container {
+            background: white;
+            border-radius: var(--border-radius);
+            border: 2px solid var(--light-gray);
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .progress-header h3 {
+            color: var(--dark-color);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .session-info {
+            background: var(--light-gray);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+
+        .progress-track {
+            margin-bottom: 30px;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .progress-bar-container {
+            height: 16px;
+            background: var(--light-gray);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success-color), var(--primary-color));
+            border-radius: 8px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .details-container {
+            background: var(--light-gray);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .details-header {
+            padding: 20px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .details-header h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dark-color);
+        }
+
+        .btn-details {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--gray-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .details-content {
+            padding: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .stat-label {
+            font-weight: 500;
+            color: var(--gray-color);
+        }
+
+        .stat-value {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-idle { color: var(--gray-color); }
+        .status-starting { color: #4cc9f0; }
+        .status-loading { color: #4361ee; }
+        .status-processing { color: #7209b7; }
+        .status-generating { color: #3a0ca3; }
+        .status-converting { color: #f72585; }
+        .status-uploading { color: #4361ee; }
+        .status-completed { color: #06d6a0; }
+        .status-error { color: var(--danger-color); }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+            margin-top: 40px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-container">
+                <div class="logo">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Générateur de Factures Automatique</h1>
+                    <p class="subtitle">CLAR SERVICES - Interface de Génération</p>
+                </div>
+            </div>
+            <div class="cloud-status">
+                <i class="fas fa-cloud"></i>
+                <span>Cloudinary Connecté</span>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="card">
+                <div class="card-body">
+                    <div class="info-section">
+                        <div class="info-box">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <h3>Ce qu'il faut faire:</h3>
+                                <ol>
+                                    <li>Cliquez sur le bouton de lancement</li>
+                                    <li>Attendez la fin de la génération (barre de progression)</li>
+                                    <li>Allez dans votre compte Cloudinary</li>
+                                    <li>Téléchargez les factures dans le dossier "factures"</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-section">
+                        <button id="generateBtn" class="btn-generate">
+                            <i class="fas fa-bolt"></i>
+                            Lancer la Génération des Factures
+                        </button>
+                    </div>
+
+                    <div id="progressContainer" class="progress-container" style="display: none;">
+                        <div class="progress-header">
+                            <h3><i class="fas fa-tasks"></i> Progression en Temps Réel</h3>
+                            <div id="sessionInfo" class="session-info">Session: -</div>
+                        </div>
+
+                        <div class="progress-track">
+                            <div class="progress-labels">
+                                <span id="progressMessage">Initialisation du système...</span>
+                                <span id="progressPercent">0%</span>
+                            </div>
+                            
+                            <div class="progress-bar-container">
+                                <div id="progressBar" class="progress-bar"></div>
+                            </div>
+
+                            <div id="currentClient" style="text-align: center; color: var(--primary-color); font-size: 14px; margin-top: 10px; font-weight: 500;">
+                                <i class="fas fa-user"></i> <span>En attente...</span>
+                            </div>
+                        </div>
+
+                        <div id="detailsContainer" class="details-container">
+                            <div class="details-header">
+                                <h4><i class="fas fa-chart-bar"></i> Détails de la Génération</h4>
+                                <button id="toggleDetails" class="btn-details">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                            <div id="detailsContent" class="details-content" style="display: none;">
+                                <div class="stats-grid">
+                                    <div class="stat-item">
+                                        <span class="stat-label">Statut :</span>
+                                        <span id="detailStatus" class="stat-value status-idle">
+                                            <i class="fas fa-clock"></i> En attente
+                                        </span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-label">Clients traités :</span>
+                                        <span id="detailClients" class="stat-value">
+                                            <i class="fas fa-users"></i> <span id="clientsCount">0/0</span>
+                                        </span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-label">Progression :</span>
+                                        <span id="detailProgress" class="stat-value">
+                                            <i class="fas fa-chart-line"></i> <span id="progressText">0%</span>
+                                        </span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-label">Durée :</span>
+                                        <span id="detailDuration" class="stat-value">
+                                            <i class="fas fa-clock"></i> <span id="durationText">0s</span>
+                                        </span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-label">Factures générées :</span>
+                                        <span id="detailFactures" class="stat-value">
+                                            <i class="fas fa-file-pdf"></i> <span id="facturesCount">0</span>
+                                        </span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-label">Dernier client :</span>
+                                        <span id="detailLastClient" class="stat-value">
+                                            <i class="fas fa-user"></i> <span id="lastClientName">-</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>© 2024 CLAR SERVICES - Système de Génération de Factures Automatisé</p>
+            <p class="footer-links">
+                <span><i class="fas fa-cloud"></i> Cloudinary</span>
+                <span><i class="fas fa-file-excel"></i> Excel</span>
+                <span><i class="fas fa-file-pdf"></i> PDF</span>
+                <span><i class="fas fa-bolt"></i> Automatisation</span>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        class FactureGenerator {
+            constructor() {
+                this.currentSessionId = null;
+                this.progressInterval = null;
+                this.isGenerating = false;
+                this.startTime = null;
+                
+                this.initializeElements();
+                this.bindEvents();
+                this.checkServerHealth();
+            }
+            
+            initializeElements() {
+                this.generateBtn = document.getElementById('generateBtn');
+                this.progressContainer = document.getElementById('progressContainer');
+                this.progressBar = document.getElementById('progressBar');
+                this.progressMessage = document.getElementById('progressMessage');
+                this.progressPercent = document.getElementById('progressPercent');
+                this.sessionInfo = document.getElementById('sessionInfo');
+                this.toggleDetailsBtn = document.getElementById('toggleDetails');
+                this.detailsContent = document.getElementById('detailsContent');
+                
+                // Détails
+                this.detailStatus = document.getElementById('detailStatus');
+                this.clientsCount = document.getElementById('clientsCount');
+                this.progressText = document.getElementById('progressText');
+                this.durationText = document.getElementById('durationText');
+                this.facturesCount = document.getElementById('facturesCount');
+                this.lastClientName = document.getElementById('lastClientName');
+                this.currentClientElement = document.getElementById('currentClient').querySelector('span');
+            }
+            
+            bindEvents() {
+                this.generateBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.startGeneration();
+                });
+                this.toggleDetailsBtn.addEventListener('click', () => this.toggleDetails());
+            }
+            
+            async startGeneration() {
+                if (this.isGenerating) {
+                    alert('Une génération est déjà en cours');
+                    return;
+                }
+                
+                this.isGenerating = true;
+                this.startTime = new Date();
+                this.generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Démarrage...';
+                this.generateBtn.disabled = true;
+                
+                try {
+                    console.log('📤 Envoi de la requête de génération...');
+                    const response = await fetch('http://localhost:3000/api/generate', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    console.log('📥 Réponse reçue:', response.status);
+                    const data = await response.json();
+                    console.log('📋 Données reçues:', data);
+                    
+                    if (data.success) {
+                        this.currentSessionId = data.sessionId;
+                        console.log('✅ Session créée:', this.currentSessionId);
+                        this.showProgress();
+                        this.startProgressTracking();
+                        this.updateSessionInfo();
+                    } else {
+                        throw new Error(data.error || 'Erreur inconnue');
+                    }
+                } catch (error) {
+                    console.error('❌ Erreur:', error);
+                    this.showError(`Impossible de démarrer la génération: ${error.message}`);
+                    this.resetGenerateButton();
+                }
+            }
+            
+            showProgress() {
+                this.progressContainer.style.display = 'block';
+                
+                // Réinitialiser la progression
+                this.progressBar.style.width = '0%';
+                this.progressPercent.textContent = '0%';
+                this.progressMessage.textContent = 'Initialisation du système...';
+                this.currentClientElement.textContent = 'En attente...';
+                
+                // Réinitialiser les détails
+                this.detailStatus.innerHTML = '<i class="fas fa-clock"></i> En attente';
+                this.detailStatus.className = 'stat-value status-idle';
+                this.clientsCount.textContent = '0/0';
+                this.progressText.textContent = '0%';
+                this.durationText.textContent = '0s';
+                this.facturesCount.textContent = '0';
+                this.lastClientName.textContent = '-';
+            }
+            
+            startProgressTracking() {
+                if (this.progressInterval) {
+                    clearInterval(this.progressInterval);
+                }
+                
+                this.progressInterval = setInterval(() => {
+                    this.checkProgress();
+                    this.updateDuration();
+                }, 300);
+            }
+            
+            updateDuration() {
+                if (this.startTime) {
+                    const now = new Date();
+                    const duration = Math.round((now - this.startTime) / 1000);
+                    this.durationText.textContent = `${duration}s`;
+                }
+            }
+            
+            async checkProgress() {
+                if (!this.currentSessionId) {
+                    console.warn('⚠️ Pas de sessionId');
+                    return;
+                }
+                
+                try {
+                    const url = `http://localhost:3000/api/progress/${this.currentSessionId}`;
+                    console.log('🔄 Vérification de la progression:', url);
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    
+                    console.log('📊 Réponse progression:', data);
+                    
+                    if (data.success) {
+                        this.updateProgress(data.session);
+                        
+                        if (data.session.status === 'completed' || data.session.status === 'error') {
+                            clearInterval(this.progressInterval);
+                            this.isGenerating = false;
+                            this.resetGenerateButton();
+                            
+                            if (data.session.status === 'completed') {
+                                this.showSuccess(data.session);
+                            } else {
+                                this.showError(data.session.error || 'Erreur inconnue');
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('❌ Erreur lors de la récupération de la progression:', error);
+                }
+            }
+            
+            updateProgress(session) {
+                // Mettre à jour la barre de progression
+                this.progressBar.style.width = `${session.progress}%`;
+                this.progressPercent.textContent = `${session.progress}%`;
+                this.progressMessage.textContent = session.message;
+                this.progressText.textContent = `${session.progress}%`;
+                
+                // Mettre à jour le statut
+                const statusText = this.getStatusText(session.status);
+                this.detailStatus.innerHTML = `<i class="fas ${this.getStatusIcon(session.status)}"></i> ${statusText}`;
+                this.detailStatus.className = `stat-value status-${session.status}`;
+                
+                // Mettre à jour les clients
+                this.clientsCount.textContent = `${session.clientsProcessed || 0}/${session.totalClients || 0}`;
+                this.facturesCount.textContent = session.urls ? session.urls.length : 0;
+                
+                // Mettre à jour le client actuel
+                if (session.currentClient) {
+                    this.lastClientName.textContent = session.currentClient;
+                    this.currentClientElement.textContent = session.currentClient;
+                } else if (session.message && session.message.includes('pour:')) {
+                    const match = session.message.match(/pour:\s*(.+)/);
+                    if (match) {
+                        const clientName = match[1];
+                        this.lastClientName.textContent = clientName;
+                        this.currentClientElement.textContent = clientName;
+                    }
+                }
+                
+                // Mettre à jour la durée
+                if (session.startTime) {
+                    const start = new Date(session.startTime);
+                    const now = session.endTime ? new Date(session.endTime) : new Date();
+                    const duration = Math.round((now - start) / 1000);
+                    this.durationText.textContent = `${duration}s`;
+                }
+                
+                // Mettre à jour les infos de session
+                this.updateSessionInfo();
+            }
+            
+            getStatusText(status) {
+                const statusMap = {
+                    'starting': 'Démarrage',
+                    'loading': 'Chargement',
+                    'processing': 'Traitement',
+                    'generating': 'Génération',
+                    'converting': 'Conversion',
+                    'uploading': 'Upload',
+                    'completed': 'Terminé',
+                    'error': 'Erreur'
+                };
+                return statusMap[status] || status;
+            }
+            
+            getStatusIcon(status) {
+                const iconMap = {
+                    'starting': 'fa-play',
+                    'loading': 'fa-cloud-download-alt',
+                    'processing': 'fa-cogs',
+                    'generating': 'fa-file-invoice',
+                    'converting': 'fa-sync-alt',
+                    'uploading': 'fa-cloud-upload-alt',
+                    'completed': 'fa-check-circle',
+                    'error': 'fa-exclamation-circle'
+                };
+                return iconMap[status] || 'fa-clock';
+            }
+            
+            showSuccess(session) {
+                alert(`✅ Génération terminée avec succès!\n\n${session.message}\n\nVeuillez vérifier vos fichiers sur Cloudinary.`);
+            }
+            
+            showError(errorMessage) {
+                alert(`❌ Erreur lors de la génération:\n\n${errorMessage}`);
+            }
+            
+            toggleDetails() {
+                const isExpanded = this.detailsContent.style.display !== 'none';
+                this.detailsContent.style.display = isExpanded ? 'none' : 'block';
+                const icon = this.toggleDetailsBtn.querySelector('i');
+                icon.className = isExpanded ? 'fas fa-chevron-down' : 'fas fa-chevron-up';
+            }
+            
+            updateSessionInfo() {
+                if (this.currentSessionId) {
+                    this.sessionInfo.textContent = `Session: ${this.currentSessionId.slice(-8)}`;
+                }
+            }
+            
+            async checkServerHealth() {
+                try {
+                    const response = await fetch('http://localhost:3000/api/health');
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        console.log('✅ Serveur connecté');
+                    } else {
+                        console.error('⚠️ Serveur non disponible');
+                        this.generateBtn.disabled = true;
+                        this.generateBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Serveur non disponible';
+                    }
+                } catch (error) {
+                    console.error('❌ Impossible de contacter le serveur:', error);
+                    this.generateBtn.disabled = true;
+                    this.generateBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Serveur non disponible';
+                }
+            }
+            
+            resetGenerateButton() {
+                this.generateBtn.innerHTML = '<i class="fas fa-bolt"></i> Lancer la Génération des Factures';
+                this.generateBtn.disabled = false;
+            }
+        }
+
+        // Initialiser l'application
+        document.addEventListener('DOMContentLoaded', () => {
+            window.generator = new FactureGenerator();
+        });
+    </script>
+</body>
+</html>
