@@ -642,47 +642,50 @@
                     console.error('❌ Erreur lors de la récupération de la progression:', error);
                 }
             }
-            
             updateProgress(session) {
-                // Mettre à jour la barre de progression
-                this.progressBar.style.width = `${session.progress}%`;
-                this.progressPercent.textContent = `${session.progress}%`;
-                this.progressMessage.textContent = session.message;
-                this.progressText.textContent = `${session.progress}%`;
-                
-                // Mettre à jour le statut
-                const statusText = this.getStatusText(session.status);
-                this.detailStatus.innerHTML = `<i class="fas ${this.getStatusIcon(session.status)}"></i> ${statusText}`;
-                this.detailStatus.className = `stat-value status-${session.status}`;
-                
-                // Mettre à jour les clients
-                this.clientsCount.textContent = `${session.clientsProcessed || 0}/${session.totalClients || 0}`;
-                this.facturesCount.textContent = session.urls ? session.urls.length : 0;
-                
-                // Mettre à jour le client actuel
-                if (session.currentClient) {
-                    this.lastClientName.textContent = session.currentClient;
-                    this.currentClientElement.textContent = session.currentClient;
-                } else if (session.message && session.message.includes('pour:')) {
-                    const match = session.message.match(/pour:\s*(.+)/);
-                    if (match) {
-                        const clientName = match[1];
-                        this.lastClientName.textContent = clientName;
-                        this.currentClientElement.textContent = clientName;
-                    }
-                }
-                
-                // Mettre à jour la durée
-                if (session.startTime) {
-                    const start = new Date(session.startTime);
-                    const now = session.endTime ? new Date(session.endTime) : new Date();
-                    const duration = Math.round((now - start) / 1000);
-                    this.durationText.textContent = `${duration}s`;
-                }
-                
-                // Mettre à jour les infos de session
-                this.updateSessionInfo();
-            }
+    // Mettre à jour la barre de progression
+    this.progressBar.style.width = `${session.progress}%`;
+    this.progressPercent.textContent = `${session.progress}%`;
+    this.progressMessage.textContent = session.message;
+    this.progressText.textContent = `${session.progress}%`;
+    
+    // Mettre à jour le statut
+    const statusText = this.getStatusText(session.status);
+    this.detailStatus.innerHTML = `<i class="fas ${this.getStatusIcon(session.status)}"></i> ${statusText}`;
+    this.detailStatus.className = `stat-value status-${session.status}`;
+    
+    // Mettre à jour les clients
+    this.clientsCount.textContent = `${session.clientsProcessed || 0}/${session.totalClients || 0}`;
+    
+    // MODIFICATION: Diviser par 2 le nombre de factures
+    let facturesNumber = session.urls ? session.urls.length : 0;
+    let facturesDivided = Math.floor(facturesNumber / 2);
+    this.facturesCount.textContent = facturesDivided;
+    
+    // Mettre à jour le client actuel
+    if (session.currentClient) {
+        this.lastClientName.textContent = session.currentClient;
+        this.currentClientElement.textContent = session.currentClient;
+    } else if (session.message && session.message.includes('pour:')) {
+        const match = session.message.match(/pour:\s*(.+)/);
+        if (match) {
+            const clientName = match[1];
+            this.lastClientName.textContent = clientName;
+            this.currentClientElement.textContent = clientName;
+        }
+    }
+    
+    // Mettre à jour la durée
+    if (session.startTime) {
+        const start = new Date(session.startTime);
+        const now = session.endTime ? new Date(session.endTime) : new Date();
+        const duration = Math.round((now - start) / 1000);
+        this.durationText.textContent = `${duration}s`;
+    }
+    
+    // Mettre à jour les infos de session
+    this.updateSessionInfo();
+}
             
             getStatusText(status) {
                 const statusMap = {
